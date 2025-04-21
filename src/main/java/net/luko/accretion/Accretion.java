@@ -1,7 +1,14 @@
 package net.luko.accretion;
 
 import com.mojang.logging.LogUtils;
+import net.luko.accretion.block.ModBlocks;
+import net.luko.accretion.block.entity.ModBlockEntites;
+import net.luko.accretion.item.ModCreativeModeTabs;
+import net.luko.accretion.item.ModItems;
+import net.luko.accretion.screen.ModMenuTypes;
+import net.luko.accretion.screen.VoidBinderScreen;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +33,12 @@ public class Accretion {
     private static final Logger LOGGER = LogUtils.getLogger();
     public Accretion(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
+
+        ModCreativeModeTabs.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        ModBlockEntites.register(modEventBus);
+        ModMenuTypes.register((modEventBus));
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -70,8 +83,7 @@ public class Accretion {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            MenuScreens.register(ModMenuTypes.VOID_BINDER_MENU.get(), VoidBinderScreen::new);
         }
     }
 }
